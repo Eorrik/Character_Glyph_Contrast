@@ -38,13 +38,25 @@ def build_pipeline():
 
     save_rgb_image(OUTPUT_DIR / "skeleton_overlay.png", skeleton_comparison.overlay_rgb)
     save_rgb_image(OUTPUT_DIR / "heatmap_diff.png", ink_comparison.heatmap_rgb)
-    export_static_html(OUTPUT_DIR / "glyph_contrast_report.html", expert.normalized_binary, skeleton_comparison, ink_comparison)
+    export_static_html(
+        OUTPUT_DIR / "glyph_contrast_report.html",
+        expert.normalized_binary,
+        user.normalized_binary,
+        skeleton_comparison,
+        ink_comparison,
+    )
 
     return expert, user, skeleton_comparison, ink_comparison, metrics
 
 
 expert_result, user_result, skeleton_result, ink_result, comparison_metrics = build_pipeline()
-app = build_dash_app(expert_result.normalized_binary, skeleton_result, ink_result, comparison_metrics)
+app = build_dash_app(
+    expert_result.normalized_binary,
+    user_result.normalized_binary,
+    skeleton_result,
+    ink_result,
+    comparison_metrics,
+)
 server = app.server
 
 
